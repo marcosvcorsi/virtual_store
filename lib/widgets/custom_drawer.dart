@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:virtual_store/screens/login_screen.dart';
 import 'package:virtual_store/tiles/drawer_tile.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -62,7 +63,9 @@ class CustomDrawer extends StatelessWidget {
                                     color: Theme.of(context).primaryColor)
                             ),
                             onTap: () {
-
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => LoginScreen())
+                              );
                             },
                           )
                         ],
