@@ -14,17 +14,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _addressController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Criar Conta"),
           centerTitle: true,
         ),
         body: ScopedModelDescendant<UserModel>(
           builder: (context, child, model) {
-            if(model.isLoading) {
+            if (model.isLoading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -94,19 +96,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         "Salvar",
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
                       ),
-                      color: Theme
-                          .of(context)
-                          .primaryColor,
+                      color: Theme.of(context).primaryColor,
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-
                           Map<String, dynamic> userData = {
                             "name": _nameController.text,
                             "email": _emailController.text,
                             "address": _addressController.text
                           };
 
-                          model.signUp(userData: userData,
+                          model.signUp(
+                              userData: userData,
                               pass: _passController.text,
                               onSucess: _onSucess,
                               onFail: _onFail);
@@ -122,10 +122,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _onSucess() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Usuário criado com sucesso"),
+      backgroundColor: Theme.of(context).primaryColor,
+      duration: Duration(seconds: 2),
+    ));
 
+    Future.delayed(Duration(seconds: 2)).then((_) {
+      Navigator.of(context).pop();
+    });
   }
 
   void _onFail() {
-
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao criar usuário"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
   }
 }
