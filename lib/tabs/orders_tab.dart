@@ -8,23 +8,27 @@ class OrdersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (UserModel.of(context).isLoggedIn()) {
-      String uid = UserModel
-          .of(context)
-          .firebaseUser
-          .uid;
+      String uid = UserModel.of(context).firebaseUser.uid;
 
       return FutureBuilder<QuerySnapshot>(
-        future: Firestore.instance.collection("users").document(uid).collection(
-            "orders").getDocuments(),
+        future: Firestore.instance
+            .collection("users")
+            .document(uid)
+            .collection("orders")
+            .getDocuments(),
         builder: (context, snapshot) {
-          if(!snapshot.hasData) {
+          if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
 
           return ListView(
-            children: snapshot.data.documents.map((doc) => OrderTile(doc.documentID)).toList(),
+            children: snapshot.data.documents
+                .map((doc) => OrderTile(doc.documentID))
+                .toList()
+                .reversed
+                .toList(),
           );
         },
       );
@@ -37,9 +41,7 @@ class OrdersTab extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.list,
-              color: Theme
-                  .of(context)
-                  .primaryColor,
+              color: Theme.of(context).primaryColor,
               size: 80.0,
             ),
             SizedBox(
@@ -47,8 +49,7 @@ class OrdersTab extends StatelessWidget {
             ),
             Text(
               "Faça o login para acompanhar!",
-              style:
-              TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -60,12 +61,10 @@ class OrdersTab extends StatelessWidget {
                 style: TextStyle(fontSize: 18.0),
               ),
               textColor: Colors.white,
-              color: Theme
-                  .of(context)
-                  .primaryColor,
+              color: Theme.of(context).primaryColor,
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => LoginScreen()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             )
           ],
